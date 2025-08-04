@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-commerce Price Comparison App</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Google Fonts for a modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background: #004d99;
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        .header h1 {
+            font-weight: 700;
+        }
+        .card {
+            border: none;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-radius: 1rem;
+            overflow: hidden;
+            height: 100%;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+        .card-img-top {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            background-color: #fff;
+            padding: 1rem;
+        }
+        .card-body {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .product-name {
+            font-weight: 600;
+            color: #333;
+            height: 3rem; /* Fixed height for consistent card size */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #004d99;
+            margin-top: 0.5rem;
+        }
+        .product-source {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        .source-heading {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+            color: #004d99;
+            border-bottom: 2px solid #004d99;
+            padding-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <h1>PriceWise NG 💰</h1>
+        <p class="lead">Compare prices from Jumia, Konga, and Jiji to save money.</p>
+    </div>
+</div>
+
+<div class="container">
+    <!-- Search Form -->
+    <div class="card p-4 mb-5 shadow-sm">
+        <form th:action="@{/search}" method="post" class="row g-3 align-items-center">
+            <div class="col-md-9">
+                <input type="text" name="searchTerm" class="form-control form-control-lg" placeholder="Search for a product (e.g., Samsung 4K TV)" required>
+            </div>
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary btn-lg w-100">Compare Prices</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Product Results -->
+    <div th:if="${productsBySource != null and not productsBySource.isEmpty()}">
+        <h2 class="mb-4">Search Results for "<span th:text="${searchTerm}"></span>"</h2>
+
+        <!-- Loop through each group (Source) -->
+        <div th:each="sourceEntry : ${productsBySource}" class="mb-5">
+            <h3 class="source-heading" th:text="${sourceEntry.key}">E-commerce Site</h3>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+                <!-- Loop through products within each group -->
+                <div class="col" th:each="product : ${sourceEntry.value}">
+                    <div class="card">
+                        <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image">
+                        <div class="card-body">
+                            <div>
+                                <h5 class="card-title product-name" th:text="${product.name}">Product Name</h5>
+                                <p class="product-price">₦<span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">Price</span></p>
+                                <small class="product-source" th:text="'Source: ' + ${product.source}"></small>
+                            </div>
+                            <a th:href="${product.productUrl}" target="_blank" class="btn btn-sm btn-outline-primary mt-3 w-100">View Product</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:unless="${productsBySource != null and not productsBySource.isEmpty()}" class="alert alert-info text-center mt-5" role="alert">
+        No products found. Please enter a product name and click "Compare Prices".
+    </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
