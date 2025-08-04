@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+##Environment##
+.env
+src/main/java/com/bash/pricewise/KaraTest.java
+
