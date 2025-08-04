@@ -27,7 +27,7 @@ public class ProductController {
         // Display an empty page or some initial products
         // No longer using pagination for the home page, just an empty list
         model.addAttribute("productsBySource", Map.of());
-        return "search";
+        return "home";
     }
 
     @PostMapping("/search")
@@ -50,7 +50,7 @@ public class ProductController {
 
         model.addAttribute("productsBySource", productsBySource);
         model.addAttribute("searchTerm", searchTerm);
-        return "search";
+        return "home";
     }
 
 }
