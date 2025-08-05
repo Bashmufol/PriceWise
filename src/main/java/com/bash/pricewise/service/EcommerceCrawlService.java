@@ -54,7 +54,7 @@ public class EcommerceCrawlService {
         try {
             Document doc = Jsoup.connect(url)
                     .userAgent("PriceComparisonApp/1.0 (Nigeria)")
-                    .timeout(10000)
+                    .timeout(5000)
                     .get();
 
             // === IMPORTANT: These selectors are examples. You must inspect the actual Jumia page to find correct ones. ===
@@ -110,7 +110,7 @@ public class EcommerceCrawlService {
         try {
             Document doc = Jsoup.connect(url)
                     .userAgent("PriceComparisonApp/1.0 (Nigeria)")
-                    .timeout(10000)
+                    .timeout(5000)
                     .get();
 
             // === IMPORTANT: These selectors are examples. You must inspect the actual Konga page to find correct ones. ===
@@ -166,7 +166,7 @@ public class EcommerceCrawlService {
         try {
             Document doc = Jsoup.connect(url)
                     .userAgent("PriceComparisonApp/1.0 (Nigeria)")
-                    .timeout(10000)
+                    .timeout(5000)
                     .get();
 
             // === IMPORTANT: These selectors are examples. You must inspect the actual Jiji page to find correct ones. ===
