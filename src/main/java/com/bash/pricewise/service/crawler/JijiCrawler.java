@@ -77,7 +77,7 @@ public class JijiCrawler implements WebsiteCrawler {
     // Helper method to simulate delay between requests for ethical scraping
     private void sleep() {
         try {
-            Thread.sleep(4000); // Wait for 4 seconds
+            Thread.sleep(2000); // Wait for 2 seconds
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
