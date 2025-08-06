@@ -1,19 +1,10 @@
 package com.bash.pricewise.service;
 
-import com.bash.pricewise.model.Product;
 import com.bash.pricewise.repository.ProductRepository;
 import com.bash.pricewise.service.crawler.WebsiteCrawler;
 import lombok.RequiredArgsConstructor;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 
 @Service
@@ -28,6 +19,7 @@ public class EcommerceCrawlService {
 
         System.out.println("Starting web crawl for: " + searchTerm);
 
+//        Loop through each implementation of the WebsiteCrawler interface and call the crawl method
         for (WebsiteCrawler crawler : websiteCrawlers) {
             System.out.println("Crawling " + crawler.getBaseUrl() + " for: " + searchTerm);
             crawler.crawl(searchTerm);

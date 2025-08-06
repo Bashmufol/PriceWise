@@ -8,7 +8,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 
@@ -28,22 +27,22 @@ public class JumiaCrawler implements WebsiteCrawler {
 
         try {
             Document doc = Jsoup.connect(url)
-                    .userAgent("PriceComparisonApp/1.0 (Nigeria)")
+                    .userAgent("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36")
                     .timeout(5000)
                     .get();
 
-            // === IMPORTANT: These selectors are examples. You must inspect the actual Jumia page to find correct ones. ===
+            // Extracting product from the target website
             Elements products = doc.select(".core");
 
             for (Element productElement : products) {
                 Product product = new Product();
                 product.setSource("Jumia");
 
-                // Extracting name
+                // Extracting name of product
                 String name = productElement.select("h3.name").text();
                 product.setName(name);
 
-                // Extracting price
+                // Extracting price of product
                 String priceText = productElement.select(".prc").text()
                         .replace("₦", "")
                         .replace(",", "")
@@ -55,7 +54,7 @@ public class JumiaCrawler implements WebsiteCrawler {
                     continue; // Skip this product if price cannot be parsed
                 }
 
-                // Extracting image URL
+                // Extracting image URL of product
                 String imageUrl = productElement.select("img.img")
                         .attr("data-src");
                 product.setImageUrl(imageUrl);
@@ -63,8 +62,6 @@ public class JumiaCrawler implements WebsiteCrawler {
                 // Extracting product URL
                 String productUrl = "https://www.jumia.com.ng" + productElement.select("a.core").attr("href");
                 product.setProductUrl(productUrl);
-
-                // Rating field has been removed as per the user's request.
 
                 productRepository.save(product);
             }
@@ -78,7 +75,7 @@ public class JumiaCrawler implements WebsiteCrawler {
         return baseUrl;
     }
 
-    // Helper method to simulate a random delay between requests for ethical scraping
+    // Helper method to simulate delay between requests for ethical scraping
     private void sleep() {
         try {
             Thread.sleep(4000); // Wait for 4 seconds
