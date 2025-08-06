@@ -23,8 +23,7 @@ public class ProductController {
 
     @GetMapping("/")
     public String home(Model model) {
-        // Display an empty page or some initial products
-        // No longer using pagination for the home page, just an empty list
+        // Display an empty page
         model.addAttribute("productsBySource", Map.of());
         return "home";
     }
@@ -34,7 +33,7 @@ public class ProductController {
         // First, trigger the crawl to get the latest data
         crawlService.crawlAndSaveProducts(searchTerm);
 
-        // Fetch all results from the database
+        // Then, Fetch all results from the database
         List<Product> products = productRepository.findByNameContainingIgnoreCase(searchTerm);
 
         // Sort all products by price from lowest to highest
