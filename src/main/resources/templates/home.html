@@ -100,32 +100,27 @@
     </div>
 
     <!-- Product Results -->
-    <div th:if="${productsBySource != null and not productsBySource.isEmpty()}">
+    <div th:if="${not #lists.isEmpty(products)}">
         <h2 class="mb-4">Search Results for "<span th:text="${searchTerm}"></span>"</h2>
-
-        <!-- Loop through each group (Source) -->
-        <div th:each="sourceEntry : ${productsBySource}" class="mb-5">
-            <h3 class="source-heading" th:text="${sourceEntry.key}">E-commerce Site</h3>
-            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
-                <!-- Loop through products within each group -->
-                <div class="col" th:each="product : ${sourceEntry.value}">
-                    <div class="card">
-                        <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image">
-                        <div class="card-body">
-                            <div>
-                                <h5 class="card-title product-name" th:text="${product.name}">Product Name</h5>
-                                <p class="product-price">₦<span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">Price</span></p>
-                                <small class="product-source" th:text="'Source: ' + ${product.source}"></small>
-                            </div>
-                            <a th:href="${product.productUrl}" target="_blank" class="btn btn-sm btn-outline-primary mt-3 w-100">View Product</a>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            <!-- Loop through the single, sorted list of products -->
+            <div class="col" th:each="product : ${products}">
+                <div class="card">
+                    <img th:src="${product.imageUrl}" class="card-img-top" alt="Product Image">
+                    <div class="card-body">
+                        <div>
+                            <h5 class="card-title product-name" th:text="${product.name}">Product Name</h5>
+                            <p class="product-price">₦<span th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 2, 'POINT')}">Price</span></p>
+                            <small class="product-source" th:text="'Source: ' + ${product.source}"></small>
                         </div>
+                        <a th:href="${product.productUrl}" target="_blank" class="btn btn-sm btn-outline-primary mt-3 w-100">View Product</a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div th:unless="${productsBySource != null and not productsBySource.isEmpty()}" class="alert alert-info text-center mt-5" role="alert">
+    <div th:unless="${not #lists.isEmpty(products)}" class="alert alert-info text-center mt-5" role="alert">
         No products found. Please enter a product name and click "Compare Prices".
     </div>
 </div>

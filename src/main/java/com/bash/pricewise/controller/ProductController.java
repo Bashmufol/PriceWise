@@ -35,20 +35,14 @@ public class ProductController {
         // First, trigger the crawl to get the latest data
         crawlService.crawlAndSaveProducts(searchTerm);
 
-        // Then, fetch all results from the database
+        // Fetch all results from the database
         List<Product> products = productRepository.findByNameContainingIgnoreCase(searchTerm);
 
-        // Group products by source and sort each group by price
-        Map<String, List<Product>> productsBySource = products.stream()
-                .collect(Collectors.groupingBy(Product::getSource,
-                        Collectors.collectingAndThen(
-                                Collectors.toList(),
-                                list -> {
-                                    list.sort(Comparator.comparing(Product::getPrice));
-                                    return list;
-                                })));
+        // Sort all products by price from lowest to highest
+        products.sort(Comparator.comparing(Product::getPrice));
 
-        model.addAttribute("productsBySource", productsBySource);
+        // Add the sorted list of products directly to the model
+        model.addAttribute("products", products);
         model.addAttribute("searchTerm", searchTerm);
         return "home";
     }
